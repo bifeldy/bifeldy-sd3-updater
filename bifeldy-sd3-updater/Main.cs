@@ -57,7 +57,9 @@ namespace bifeldy_sd3_updater {
 
         private async void BtnDownloadUpdate_Click(object sender, EventArgs e) {
             btnDownloadUpdate.Text = "Please Wait";
+            btnDownloadUpdate.Enabled = false;
             // TODO ::
+            btnDownloadUpdate.Enabled = true;
         }
 
         private async Task LoadAllAplicationList() {
