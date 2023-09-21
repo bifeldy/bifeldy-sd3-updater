@@ -60,11 +60,13 @@ namespace bifeldy_sd3_updater {
             btnDownloadUpdate.Enabled = false;
             // TODO ::
             btnDownloadUpdate.Enabled = true;
+            btnDownloadUpdate.Text = "Download Update";
         }
 
         private async Task LoadAllAplicationList() {
             // TODO ::
             await Task.Run(() => {
+                // TODO ::
                 Thread.Sleep(5000);
             });
         }

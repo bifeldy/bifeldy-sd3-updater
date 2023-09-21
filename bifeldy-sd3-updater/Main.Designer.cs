@@ -120,6 +120,7 @@ namespace bifeldy_sd3_updater {
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CMain";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SD3 Download Update Toolkit";
             this.TopMost = true;
