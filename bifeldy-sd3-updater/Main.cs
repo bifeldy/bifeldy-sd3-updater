@@ -113,10 +113,14 @@ namespace bifeldy_sd3_updater {
                     lblStatus.Text = $"Killing Process '{_args[0]}' ...";
                     await Task.Run(() => {
                         try {
-                            Process proc = Process.GetProcessById(int.Parse(_args[1]));
-                            if (_args[0].Contains(proc.ProcessName.ToUpper())) {
-                                proc.Kill();
+                            do {
+                                Process proc = Process.GetProcessById(int.Parse(_args[1]));
+                                if (_args[0].Contains(proc.ProcessName.ToUpper())) {
+                                    proc.Kill();
+                                }
+                                Thread.Sleep(3000);
                             }
+                            while (true);
                         }
                         catch {
                             // Process Already Exited
