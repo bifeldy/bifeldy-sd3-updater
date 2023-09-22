@@ -36,7 +36,7 @@ namespace bifeldy_sd3_updater {
         private readonly string UpdaterFtpUsername = "sd3";
         private readonly string UpdaterFtpPassword = "itsd3";
 
-        private readonly string UpdaterWorkDir = "_updater";
+        private readonly string UpdaterWorkDir = "Project_Postgresql/Hasil_PG";
 
         private string ConnectionString = string.Empty;
         List<string> Directories = new List<string>();
@@ -48,7 +48,7 @@ namespace bifeldy_sd3_updater {
         }
 
         public CMain(string[] args) : this() {
-            _args = args;
+            _args = args.Select(a => a.ToUpper()).ToArray();
             // --
             ConnectionString = $"ftp://{UpdaterFtpUsername}:{UpdaterFtpPassword}@{UpdaterFtpIpDomain}:{UpdaterFtpPort}/{UpdaterWorkDir}";
 
@@ -114,7 +114,7 @@ namespace bifeldy_sd3_updater {
                     await Task.Run(() => {
                         try {
                             Process proc = Process.GetProcessById(int.Parse(_args[1]));
-                            if (proc.ProcessName == _args[0]) {
+                            if (_args[0].Contains(proc.ProcessName.ToUpper())) {
                                 proc.Kill();
                             }
                         }
