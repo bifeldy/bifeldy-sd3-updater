@@ -36,7 +36,7 @@ namespace bifeldy_sd3_updater {
         private readonly string UpdaterFtpUsername = "sd3";
         private readonly string UpdaterFtpPassword = "itsd3";
 
-        private readonly string UpdaterWorkDir = "Project_Postgresql/Hasil_PG";
+        private readonly string UpdaterWorkDir = "_updater";
 
         private string ConnectionString = string.Empty;
         List<string> Directories = new List<string>();
@@ -241,7 +241,7 @@ namespace bifeldy_sd3_updater {
             });
             foreach (string dir in Directories.OrderByDescending(d => d.ToUpper())) {
                 string d = dir.Replace($"{UpdaterWorkDir.Split('/').Last()}/", "");
-                if (d.ToUpper().StartsWith(txtFilterSearch.Text.ToUpper()) && d.ToUpper().EndsWith(".ZIP")) {
+                if (d.ToUpper().Contains(txtFilterSearch.Text.ToUpper()) && d.ToUpper().EndsWith(".ZIP")) {
                     dgvDaftarAplikasi.Rows.Add(d);
                 }
             }

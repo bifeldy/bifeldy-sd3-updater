@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("bifeldy-sd3-updater")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("bifeldy-sd3-updater")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("PT. Indomarco Prismatama")]
 [assembly: AssemblyProduct("bifeldy-sd3-updater")]
-[assembly: AssemblyCopyright("Copyright ©  2023")]
+[assembly: AssemblyCopyright("Copyright © 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -120,7 +120,6 @@ namespace bifeldy_sd3_updater {
             this.Controls.Add(this.btnDownloadUpdate);
             this.Controls.Add(this.dgvDaftarAplikasi);
             this.Controls.Add(this.lblStatus);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
