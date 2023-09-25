@@ -181,14 +181,14 @@ namespace bifeldy_sd3_updater {
                     Process proc = null;
                     if (_args.Length == 2) {
                         statInfo.Report($"Re-Launching '{_args[0]}' ...");
-                        proc = Process.Start(Path.Combine(Application.StartupPath, $"{_args[0]}"));
+                        proc = Process.Start(Path.Combine(Application.StartupPath, $"{_args[0]}"), "--skip-update");
                     }
                     else {
                         string[] directories = Directory.GetFiles(Application.StartupPath);
                         foreach (string d in directories) {
                             if (d.ToUpper().EndsWith(".EXE") && !d.ToUpper().EndsWith($"{Application.ProductName}.EXE".ToUpper())) {
                                 string path = Path.Combine(Application.StartupPath, d);
-                                proc = Process.Start(path);
+                                proc = Process.Start(path, "--skip-update");
                             }
                         }
                     }

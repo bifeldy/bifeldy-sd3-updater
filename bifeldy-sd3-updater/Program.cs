@@ -24,7 +24,7 @@ namespace bifeldy_sd3_updater {
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        [STAThread] // updater.exe app_name.exe pid
+        [STAThread] // app_name.exe pid
         static void Main(string[] args) {
             Process currentProcess = Process.GetCurrentProcess();
             Process[] allProcess = Process.GetProcessesByName(currentProcess.ProcessName);
