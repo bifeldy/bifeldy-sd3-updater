@@ -196,7 +196,7 @@ namespace bifeldy_sd3_updater {
                         throw new Exception("Executable File Not Found");
                     }
                 }
-                catch (Exception e) {
+                catch {
                     Process.Start("explorer.exe", Application.StartupPath);
                 }
                 pgLoading.Value++;
@@ -227,7 +227,12 @@ namespace bifeldy_sd3_updater {
                 });
             }
             catch (Exception ex) {
-                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (_args.Length == 0) {
+                    MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else {
+                    Application.Exit();
+                }
             }
             pgLoading.Value++;
             lblStatus.Text = "Loading Completed ...";
@@ -256,10 +261,7 @@ namespace bifeldy_sd3_updater {
         }
 
         private async void AutoDownloadAndInstall() {
-            if (dgvDaftarAplikasi.Rows.Count == 0) {
-                MessageBox.Show("No Update Available", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else {
+            if (dgvDaftarAplikasi.Rows.Count > 0) {
                 await DownloadAndInstall();
             }
             Application.Exit();
