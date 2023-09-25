@@ -36,7 +36,7 @@ namespace bifeldy_sd3_updater {
         private readonly string UpdaterFtpUsername = "sd3";
         private readonly string UpdaterFtpPassword = "itsd3";
 
-        private readonly string UpdaterWorkDir = "Project_Postgresql/Hasil_PG";
+        private readonly string UpdaterWorkDir = "_updater";
 
         private string ConnectionString = string.Empty;
         List<string> Directories = new List<string>();
