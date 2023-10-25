@@ -43,6 +43,10 @@ namespace bifeldy_sd3_updater {
 
         IProgress<string> statInfo = null;
 
+        string appName = string.Empty;
+        string appVersion = string.Empty;
+        int appPid = 0;
+
         public CMain() {
             InitializeComponent();
         }
@@ -68,15 +72,38 @@ namespace bifeldy_sd3_updater {
                 btnDownloadUpdate.Text = "Download Or Update";
                 FilterSearchAllApps();
             }
-            else if (_args.Length > 2) {
+            else if (_args.Length > 6) {
                 MessageBox.Show("Invalid Arguments", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
             else {
-                txtFilterSearch.Text = _args[0].ToUpper().Replace(".EXE", "");
-                txtFilterSearch.Refresh();
-                FilterSearchAllApps(false);
-                AutoDownloadAndInstall();
+                for (int i = 0; i < _args.Length; i++) {
+                    string argKey = _args[i].ToUpper();
+                    string argVal = _args[i + 1].ToUpper();
+                    if (argVal.StartsWith("-")) {
+                        MessageBox.Show($"Invalid Value {argVal} For Argument {argKey}", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Application.Exit();
+                        break;
+                    }
+                    if (argKey == "--NAME") {
+                        appName = argVal.Replace(".EXE", "");
+                        i++;
+                    }
+                    else if (argKey == "--VERSION") {
+                        appVersion = int.Parse(argVal).ToString();
+                        i++;
+                    }
+                    else if (argKey == "--PID") {
+                        appPid = int.Parse(argVal);
+                        i++;
+                    }
+                }
+                if (!string.IsNullOrEmpty(appName) && !string.IsNullOrEmpty(appVersion) && appPid > 0) {
+                    txtFilterSearch.Text = appName;
+                    txtFilterSearch.Refresh();
+                    FilterSearchAllApps(false);
+                    AutoDownloadAndInstall();
+                }
             }
         }
 
@@ -108,15 +135,24 @@ namespace bifeldy_sd3_updater {
                     await request.DownloadFileTaskAsync(new Uri($"{ConnectionString}/{selectedFilePath}"), downloadedFilePath);
                 }
                 pgLoading.Value++;
-                if (_args.Length == 2) {
+                if (appPid > 0) {
                     pgLoading.Maximum++;
-                    lblStatus.Text = $"Killing Process '{_args[0]}' ...";
+                    lblStatus.Text = $"Killing Process '{appName}' With PID {appPid} ...";
                     await Task.Run(() => {
                         try {
                             do {
-                                Process proc = Process.GetProcessById(int.Parse(_args[1]));
-                                if (_args[0].Contains(proc.ProcessName.ToUpper())) {
+                                Process proc = Process.GetProcessById(appPid);
+                                if (proc.ProcessName.ToUpper().Contains(appName)) {
                                     proc.Kill();
+                                }
+                                else {
+                                    MessageBox.Show(
+                                        $"Please Manually Close Your Application {appName} Before Continue",
+                                        "Can't Kill Application",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Information
+                                    );
+                                    break;
                                 }
                                 Thread.Sleep(3000);
                             }
@@ -179,9 +215,10 @@ namespace bifeldy_sd3_updater {
                 pgLoading.Value++;
                 try {
                     Process proc = null;
-                    if (_args.Length == 2) {
-                        statInfo.Report($"Re-Launching '{_args[0]}' ...");
-                        proc = Process.Start(Path.Combine(Application.StartupPath, $"{_args[0]}"), "--skip-update");
+                    if (!string.IsNullOrEmpty(appName)) {
+                        string exeName = appName.EndsWith(".EXE") ? appName : $"{appName}.EXE";
+                        statInfo.Report($"Re-Launching '{exeName}' ...");
+                        proc = Process.Start(Path.Combine(Application.StartupPath, exeName), "--skip-update");
                     }
                     else {
                         string[] directories = Directory.GetFiles(Application.StartupPath);
@@ -193,6 +230,12 @@ namespace bifeldy_sd3_updater {
                         }
                     }
                     if (proc == null) {
+                        MessageBox.Show(
+                            "Update Completed",
+                            "Can't Auto-Run Application",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
                         throw new Exception("Executable File Not Found");
                     }
                 }
@@ -249,8 +292,8 @@ namespace bifeldy_sd3_updater {
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
             foreach (string dir in Directories.OrderByDescending(d => d.ToUpper())) {
-                string d = dir.Replace($"{UpdaterWorkDir.Split('/').Last()}/", "");
-                if (d.ToUpper().Contains(txtFilterSearch.Text.ToUpper()) && d.ToUpper().EndsWith(".ZIP")) {
+                string d = dir.Replace($"{UpdaterWorkDir.Split('/').Last()}/", "").ToUpper();
+                if (d.Contains(txtFilterSearch.Text.ToUpper()) && d.Contains(appVersion.ToUpper()) && d.EndsWith(".ZIP")) {
                     dgvDaftarAplikasi.Rows.Add(d);
                 }
             }
