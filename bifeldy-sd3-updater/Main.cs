@@ -98,7 +98,7 @@ namespace bifeldy_sd3_updater {
                         i++;
                     }
                 }
-                if (!string.IsNullOrEmpty(appName) && !string.IsNullOrEmpty(appVersion) && appPid > 0) {
+                if (!string.IsNullOrEmpty(appName) && appPid > 0) {
                     txtFilterSearch.Text = appName;
                     txtFilterSearch.Refresh();
                     FilterSearchAllApps(false);
@@ -293,8 +293,15 @@ namespace bifeldy_sd3_updater {
             });
             foreach (string dir in Directories.OrderByDescending(d => d.ToUpper())) {
                 string d = dir.Replace($"{UpdaterWorkDir.Split('/').Last()}/", "").ToUpper();
-                if (d.Contains(txtFilterSearch.Text.ToUpper()) && d.Contains(appVersion.ToUpper()) && d.EndsWith(".ZIP")) {
-                    dgvDaftarAplikasi.Rows.Add(d);
+                if (d.Contains(txtFilterSearch.Text.ToUpper()) && d.EndsWith(".ZIP")) {
+                    if (!string.IsNullOrEmpty(appVersion)) {
+                        if (d.Contains(appVersion.ToUpper())) {
+                            dgvDaftarAplikasi.Rows.Add(d);
+                        }
+                    }
+                    else {
+                        dgvDaftarAplikasi.Rows.Add(d);
+                    }
                 }
             }
             dgvDaftarAplikasi.Refresh();
